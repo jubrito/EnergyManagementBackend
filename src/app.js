@@ -3,7 +3,12 @@ const { readings } = require("./readings/readings");
 const { readingsData } = require("./readings/readings.data");
 const { read, store } = require("./readings/readings-controller");
 const { recommend, compare } = require("./price-plans/price-plans-controller");
-const { timeElapsedInHours } = require("./usage/usage");
+const {
+  timeElapsedInDecimalHours,
+  average,
+  usageCost,
+  usage,
+} = require("./usage/usage");
 const { meterReadingsMock } = require("./mocks/meter-readings");
 
 const app = express();
@@ -41,53 +46,22 @@ const convertMockToReadings = (mock) => {
 
 // app.get('/usage/:smartMeterId&:pricePlan', async (req, res) => {
 app.get("/usage/:smartMeterId", async (req, res) => {
-  // readings in kW, time in hour: [{"time":1607686125,"reading":0.8570415390876098}]
-  console.log("req.params.smartMeterId", req.params.smartMeterId);
-  await fetch(
-    `http://localhost:8080/readings/read/${req.params.smartMeterId}`
-  ).then(async (data) => {
-    // const readings = await data.json();
-    const readings = convertMockToReadings(meterReadingsMock);
-    console.log("readings", readings);
-    const millisecondsPerSecond = 1000;
-    const secondsPerMinute = 60;
-    const minutesPerHour = 60;
-    const hoursPerDay = 24;
-    const daysPerWeek = 7;
-    const oneWeekInMilliseconds =
-      millisecondsPerSecond *
-      secondsPerMinute *
-      minutesPerHour *
-      hoursPerDay *
-      daysPerWeek;
-    const millisecondsPerHour =
-      millisecondsPerSecond * secondsPerMinute * minutesPerHour;
-    const allReadingsInOrder = readings.map((reading) => reading);
-    allReadingsInOrder.sort((a, b) => a.time - b.time);
-    // const lastReading = allReadingsInOrder[allReadingsInOrder.length - 1];
-    // const lastWeekReadings = allReadingsInOrder.filter((reading) => {
-    //   return reading.time >= lastReading.time - oneWeekInMilliseconds;
-    // });
-    const lastWeekReadings = readings; // not sure why the exercise is considering all 12 days instead of last week only since this was in the requirements, but I've commented the code that only gets last weeks values to get to the correct result in the card1.md
-    const totalEnergyConsumed = lastWeekReadings.reduce((acc, reading) => {
-      return acc + reading.reading;
-    }, 0);
-    const avarageReadingInKW = totalEnergyConsumed / lastWeekReadings.length;
-    const firstReadingTimeStamp = lastWeekReadings[0].time;
-    const lastReadingTimeStamp =
-      lastWeekReadings[lastWeekReadings.length - 1].time;
-    const durationInHours = timeElapsedInHours(readings);
-    const energyConsumedInKWPerHour = avarageReadingInKW * durationInHours;
-    const pricePerKWHInPounds = 0.29;
-    const cost = energyConsumedInKWPerHour * pricePerKWHInPounds;
-    console.log("avarageReadingInKW", avarageReadingInKW);
-    console.log("durationInHours", durationInHours);
-    console.log("energyConsumedInKWPerHour", energyConsumedInKWPerHour);
-    console.log("cost", cost);
-  });
-  // const energyConsumed =
-  res.send(req.params.smartMeterId);
-  // res.send(usage(getReadings, req));
+  const smartMeterId = req.params.smartMeterId;
+  // const readings = read(getReadings, req);
+  const readings = getReadings(smartMeterId);
+  console.log("readings", readings);
+  // const readings = convertMockToReadings(meterReadingsMock);
+  const avarageReadingInKW = average(readings);
+  const durationInHours = timeElapsedInDecimalHours(readings);
+  const energyConsumedInKWPerHour = avarageReadingInKW * durationInHours;
+  const pricePerKWHInPounds = 0.29;
+  const cost = (energyConsumedInKWPerHour * pricePerKWHInPounds).toFixed(2);
+  console.log("usageCost", usageCost(readings, 0.29));
+  console.log("usage", usage(readings));
+  console.log("avarageReadingInKW", avarageReadingInKW);
+  console.log("durationInHours", durationInHours);
+  console.log("energyConsumedInKWPerHour", energyConsumedInKWPerHour);
+  res.send(cost);
 });
 
 const port = process.env.PORT || 8080;
