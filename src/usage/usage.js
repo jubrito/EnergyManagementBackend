@@ -47,10 +47,6 @@ const calculateEnergyCost = (readings, pricePerKWHInPounds) => {
   const energyConsumedInKWH = energyConsumedInKWPerHour(readings);
   const cost = energyCost(energyConsumedInKWH, pricePerKWHInPounds);
   return cost;
-  //   console.log("readings", readings);
-  //   console.log("durationInHours", durationInHours);
-  //   console.log("energyConsumedInKWH", energyConsumedInKWH);
-  //   console.log("cost", cost);
 };
 
 module.exports = {

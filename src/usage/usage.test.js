@@ -1,9 +1,12 @@
 const { meters, meterPricePlanMap } = require("../meters/meters");
 const { pricePlanNames, pricePlans } = require("../price-plans/price-plans");
 const { readings } = require("../readings/readings");
+const { convertMockToReadings } = require("../utils/convertMockToReadings");
+const { meterReadingsMock } = require("../mocks/meter-readings");
 const {
   average,
-  timeElapsedInHours,
+  timeElapsedInWholeHours,
+  calculateEnergyCost,
   usage,
   usageCost,
   usageForAllPricePlans,
@@ -88,6 +91,13 @@ describe("usage", () => {
       {
         [pricePlanNames.PRICEPLAN2]: (0.26785 / 48) * 1,
       },
+      {
+        [pricePlanNames.PRICEPLAN_EXERCISE]: (0.26785 / 48) * 0.29,
+      },
+      {
+        [pricePlanNames.PRICEPLAN_EXERCISE_NO_PRICE_PLAN]:
+          (0.26785 / 48) * 1.01,
+      },
     ];
 
     const usageForAllPricePlansArray = usageForAllPricePlans(
@@ -96,5 +106,12 @@ describe("usage", () => {
     );
 
     expect(usageForAllPricePlansArray).toEqual(expected);
+  });
+
+  it("should calculate energy cost for a smart meter id with a plan attached to it", () => {
+    const readings = convertMockToReadings(meterReadingsMock);
+    const pricePerKWHInPounds = meterPricePlanMap["smart-meter-example"].rate;
+    const energyCost = calculateEnergyCost(readings, pricePerKWHInPounds);
+    expect(energyCost).toBe("45.10");
   });
 });
