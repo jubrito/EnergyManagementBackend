@@ -23,8 +23,17 @@ const usage = (readings) => {
   return average(readings) / timeElapsedInWholeHours(readings);
 };
 
+const energyConsumedInKWPerHour = (readings) => {
+  return average(readings) * timeElapsedInDecimalHours(readings);
+};
+
 const usageCost = (readings, rate) => {
   return usage(readings) * rate;
+};
+
+const energyCost = (energyConsumedInKWH) => {
+  const pricePerKWHInPounds = 0.29;
+  return (energyConsumedInKWH * pricePerKWHInPounds).toFixed(2);
 };
 
 const usageForAllPricePlans = (pricePlans, readings) => {
@@ -35,6 +44,16 @@ const usageForAllPricePlans = (pricePlans, readings) => {
   });
 };
 
+const calculateEnergyCost = (readings) => {
+  console.log("readings", readings);
+  const durationInHours = timeElapsedInDecimalHours(readings);
+  const energyConsumedInKWH = energyConsumedInKWPerHour(readings);
+  const cost = energyCost(energyConsumedInKWH);
+  console.log("durationInHours", durationInHours);
+  console.log("energyConsumedInKWH", energyConsumedInKWH);
+  console.log("cost", cost);
+};
+
 module.exports = {
   average,
   timeElapsedInWholeHours,
@@ -42,4 +61,7 @@ module.exports = {
   usage,
   usageCost,
   usageForAllPricePlans,
+  energyConsumedInKWPerHour,
+  energyCost,
+  calculateEnergyCost,
 };

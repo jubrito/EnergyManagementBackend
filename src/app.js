@@ -5,9 +5,9 @@ const { read, store } = require("./readings/readings-controller");
 const { recommend, compare } = require("./price-plans/price-plans-controller");
 const {
   timeElapsedInDecimalHours,
-  average,
-  usageCost,
-  usage,
+  energyConsumedInKWPerHour,
+  energyCost,
+  calculateEnergyCost,
 } = require("./usage/usage");
 const { meterReadingsMock } = require("./mocks/meter-readings");
 
@@ -47,21 +47,29 @@ const convertMockToReadings = (mock) => {
 // app.get('/usage/:smartMeterId&:pricePlan', async (req, res) => {
 app.get("/usage/:smartMeterId", async (req, res) => {
   const smartMeterId = req.params.smartMeterId;
-  // const readings = read(getReadings, req);
-  const readings = getReadings(smartMeterId);
-  console.log("readings", readings);
-  // const readings = convertMockToReadings(meterReadingsMock);
-  const avarageReadingInKW = average(readings);
-  const durationInHours = timeElapsedInDecimalHours(readings);
-  const energyConsumedInKWPerHour = avarageReadingInKW * durationInHours;
-  const pricePerKWHInPounds = 0.29;
-  const cost = (energyConsumedInKWPerHour * pricePerKWHInPounds).toFixed(2);
-  console.log("usageCost", usageCost(readings, 0.29));
-  console.log("usage", usage(readings));
-  console.log("avarageReadingInKW", avarageReadingInKW);
-  console.log("durationInHours", durationInHours);
-  console.log("energyConsumedInKWPerHour", energyConsumedInKWPerHour);
-  res.send(cost);
+  // const readings = getReadings(smartMeterId);
+  const readings = convertMockToReadings(meterReadingsMock);
+  const data = {
+    smartMeterId,
+    electricityReadings: readings,
+  };
+  fetch("http://localhost:8080/readings/store", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((result) => {
+      console.log("Readings stored successfuly");
+      console.log("Data: ", result);
+    })
+    .catch((error) => {
+      console.log("There was an error when trying to store readings");
+      console.log("Error: ", error);
+    });
+  const energyCost = calculateEnergyCost(readings);
+  res.send({ energyCost: energyCost });
 });
 
 const port = process.env.PORT || 8080;
