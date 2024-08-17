@@ -31,8 +31,7 @@ const usageCost = (readings, rate) => {
   return usage(readings) * rate;
 };
 
-const energyCost = (energyConsumedInKWH) => {
-  const pricePerKWHInPounds = 0.29;
+const energyCost = (energyConsumedInKWH, pricePerKWHInPounds) => {
   return (energyConsumedInKWH * pricePerKWHInPounds).toFixed(2);
 };
 
@@ -44,10 +43,9 @@ const usageForAllPricePlans = (pricePlans, readings) => {
   });
 };
 
-const calculateEnergyCost = (readings) => {
-  const durationInHours = timeElapsedInDecimalHours(readings);
+const calculateEnergyCost = (readings, pricePerKWHInPounds) => {
   const energyConsumedInKWH = energyConsumedInKWPerHour(readings);
-  const cost = energyCost(energyConsumedInKWH);
+  const cost = energyCost(energyConsumedInKWH, pricePerKWHInPounds);
   return cost;
   //   console.log("readings", readings);
   //   console.log("durationInHours", durationInHours);

@@ -2,13 +2,12 @@ const express = require("express");
 const { readings } = require("./readings/readings");
 const { readingsData } = require("./readings/readings.data");
 const { read, store } = require("./readings/readings-controller");
-const { recommend, compare } = require("./price-plans/price-plans-controller");
 const {
-  timeElapsedInDecimalHours,
-  energyConsumedInKWPerHour,
-  energyCost,
-  calculateEnergyCost,
-} = require("./usage/usage");
+  recommend,
+  compare,
+  getPricePlanRate,
+} = require("./price-plans/price-plans-controller");
+const { calculateEnergyCost } = require("./usage/usage");
 const { convertMockToReadings } = require("./utils/convertMockToReadings");
 const { meterReadingsMock } = require("./mocks/meter-readings");
 
@@ -34,12 +33,17 @@ app.get("/price-plans/compare-all/:smartMeterId", (req, res) => {
 });
 
 // app.get('/usage/:smartMeterId&:pricePlan', async (req, res) => {
-app.get("/usage/:smartMeterId", async (req, res) => {
+app.get("/usage/:smartMeterId&:pricePlan", async (req, res) => {
   const smartMeterId = req.params.smartMeterId;
-  let readings = getReadings(smartMeterId);
-  const shouldUseMock = true;
-  if (shouldUseMock) {
+  const pricePlan = req.params.pricePlan;
+  const pricePerKWHInPounds = getPricePlanRate(pricePlan);
+  // const pricePerKWHInPounds = extractCost(pricePlan);
+  console.log("pricePerKWHInPounds", pricePerKWHInPounds);
+  let readings;
+  if (smartMeterId === "smart-meter-example") {
     readings = convertMockToReadings(meterReadingsMock);
+  } else {
+    readings = getReadings(smartMeterId);
   }
   const data = {
     smartMeterId,
@@ -60,7 +64,7 @@ app.get("/usage/:smartMeterId", async (req, res) => {
       console.log("There was an error when trying to store readings");
       console.log("Error: ", error);
     });
-  const energyCost = calculateEnergyCost(readings);
+  const energyCost = calculateEnergyCost(readings, pricePerKWHInPounds);
   res.send({ energyCost: energyCost });
 });
 
