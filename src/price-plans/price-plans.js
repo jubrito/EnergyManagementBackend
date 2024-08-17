@@ -2,16 +2,19 @@ const pricePlanNames = {
   PRICEPLAN0: "price-plan-0",
   PRICEPLAN1: "price-plan-1",
   PRICEPLAN2: "price-plan-2",
-  PRICEPLAN_EXERCISE: "price-plan-exercise",
-  PRICEPLAN_EXERCISE_NO_PRICE_PLAN: "price-plan-exercise-no-price-plan",
+  PRICEPLAN_ATTACHED_TO_SMART_METER_ID: "price-plan-attached-to-smart-meter-id",
+  PRICEPLAN_NOT_ATTACHED_TO_SMART_METER_ID:
+    "price-plan-not-attached-to-smart-meter-id",
 };
 
 const supplierNames = {
   DR_EVILS_DARK_ENERGY_ENERGY_SUPPLIER: "Dr Evil's Dark Energy",
   THE_GREEN_ECO_ENERGY_SUPPLIER: "The Green Eco",
   POWER_FOR_EVERYONE_ENERGY_SUPPLIER: "Power for Everyone",
-  EXERCISE: "Spreadsheet example",
-  EXERCISE_NO_PRICE_PLAN: "Spreadsheet Example No Price Plan",
+  SUPLIER_PRICE_PLAN_ATTACHED_TO_SMART_METER_ID:
+    "Supplier connected to spreadsheet example where price plan is attached to smart meter id",
+  SUPLIER_PRICE_PLAN_NOT_ATTACHED_TO_SMART_METER_ID:
+    "Supplier connected to spreadsheet example where price plan is not attached to smart meter id",
 };
 
 const pricePlans = {
@@ -27,12 +30,12 @@ const pricePlans = {
     supplier: supplierNames.THE_GREEN_ECO_ENERGY_SUPPLIER,
     rate: 1,
   },
-  [pricePlanNames.PRICEPLAN_EXERCISE]: {
-    supplier: supplierNames.EXERCISE,
+  [pricePlanNames.PRICEPLAN_ATTACHED_TO_SMART_METER_ID]: {
+    supplier: supplierNames.SUPLIER_PRICE_PLAN_ATTACHED_TO_SMART_METER_ID,
     rate: 0.29,
   },
-  [pricePlanNames.PRICEPLAN_EXERCISE_NO_PRICE_PLAN]: {
-    supplier: supplierNames.EXERCISE_NO_PRICE_PLAN,
+  [pricePlanNames.PRICEPLAN_NOT_ATTACHED_TO_SMART_METER_ID]: {
+    supplier: supplierNames.SUPLIER_PRICE_PLAN_NOT_ATTACHED_TO_SMART_METER_ID,
     rate: 1.01,
   },
 };

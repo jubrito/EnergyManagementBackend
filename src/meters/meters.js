@@ -14,7 +14,8 @@ const meterPricePlanMap = {
   [meters.METER0]: pricePlans[pricePlanNames.PRICEPLAN0],
   [meters.METER1]: pricePlans[pricePlanNames.PRICEPLAN1],
   [meters.METER2]: pricePlans[pricePlanNames.PRICEPLAN2],
-  [meters.METER_WITH_PRICE_PLAN]: pricePlans[pricePlanNames.PRICEPLAN_EXERCISE],
+  [meters.METER_WITH_PRICE_PLAN]:
+    pricePlans[pricePlanNames.PRICEPLAN_ATTACHED_TO_SMART_METER_ID],
 };
 
 module.exports = { meterPricePlanMap, meters };

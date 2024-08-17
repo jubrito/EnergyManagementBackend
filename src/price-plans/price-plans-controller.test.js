@@ -25,10 +25,11 @@ describe("price plans", () => {
           [pricePlanNames.PRICEPLAN2]: (0.26785 / 48) * 1,
         },
         {
-          [pricePlanNames.PRICEPLAN_EXERCISE]: (0.26785 / 48) * 0.29,
+          [pricePlanNames.PRICEPLAN_ATTACHED_TO_SMART_METER_ID]:
+            (0.26785 / 48) * 0.29,
         },
         {
-          [pricePlanNames.PRICEPLAN_EXERCISE_NO_PRICE_PLAN]:
+          [pricePlanNames.PRICEPLAN_NOT_ATTACHED_TO_SMART_METER_ID]:
             (0.26785 / 48) * 1.01,
         },
       ],
@@ -56,13 +57,14 @@ describe("price plans", () => {
 
     const expected = [
       {
-        [pricePlanNames.PRICEPLAN_EXERCISE]: (0.26785 / 48) * 0.29,
+        [pricePlanNames.PRICEPLAN_ATTACHED_TO_SMART_METER_ID]:
+          (0.26785 / 48) * 0.29,
       },
       {
         [pricePlanNames.PRICEPLAN2]: (0.26785 / 48) * 1,
       },
       {
-        [pricePlanNames.PRICEPLAN_EXERCISE_NO_PRICE_PLAN]:
+        [pricePlanNames.PRICEPLAN_NOT_ATTACHED_TO_SMART_METER_ID]:
           (0.26785 / 48) * 1.01,
       },
       {
@@ -94,7 +96,8 @@ describe("price plans", () => {
 
     const expected = [
       {
-        [pricePlanNames.PRICEPLAN_EXERCISE]: (0.26785 / 48) * 0.29,
+        [pricePlanNames.PRICEPLAN_ATTACHED_TO_SMART_METER_ID]:
+          (0.26785 / 48) * 0.29,
       },
       {
         [pricePlanNames.PRICEPLAN2]: (0.26785 / 48) * 1,
