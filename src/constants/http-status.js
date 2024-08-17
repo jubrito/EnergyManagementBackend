@@ -1,4 +1,4 @@
-const HTTP_STATUS = {
+const HTTP_STATUS_CODES = {
   OK: 200,
   CREATED: 201,
   NO_CONTENT: 204,
@@ -8,4 +8,4 @@ const HTTP_STATUS = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
-module.exports = { HTTP_STATUS };
+module.exports = { HTTP_STATUS_CODES };

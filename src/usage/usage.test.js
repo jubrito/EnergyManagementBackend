@@ -110,7 +110,8 @@ describe("usage", () => {
 
   it("should calculate energy cost for a smart meter id with a plan attached to it", () => {
     const readings = convertMockToReadings(meterReadingsMock);
-    const pricePerKWHInPounds = meterPricePlanMap["smart-meter-example"].rate;
+    const pricePerKWHInPounds =
+      meterPricePlanMap[meters.METER_WITH_PRICE_PLAN].rate;
     const energyCost = calculateEnergyCost(readings, pricePerKWHInPounds);
     expect(energyCost).toBe("45.10");
   });
