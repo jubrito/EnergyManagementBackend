@@ -37,7 +37,7 @@ app.get("/price-plans/compare-all/:smartMeterId", (req, res) => {
 app.get("/usage/:smartMeterId", async (req, res) => {
   const smartMeterId = req.params.smartMeterId;
   let readings = getReadings(smartMeterId);
-  const shouldUseMock = false;
+  const shouldUseMock = true;
   if (shouldUseMock) {
     readings = convertMockToReadings(meterReadingsMock);
   }
