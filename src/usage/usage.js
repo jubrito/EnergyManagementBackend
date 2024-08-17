@@ -45,10 +45,10 @@ const usageForAllPricePlans = (pricePlans, readings) => {
 };
 
 const calculateEnergyCost = (readings) => {
-  console.log("readings", readings);
   const durationInHours = timeElapsedInDecimalHours(readings);
   const energyConsumedInKWH = energyConsumedInKWPerHour(readings);
   const cost = energyCost(energyConsumedInKWH);
+  console.log("readings", readings);
   console.log("durationInHours", durationInHours);
   console.log("energyConsumedInKWH", energyConsumedInKWH);
   console.log("cost", cost);

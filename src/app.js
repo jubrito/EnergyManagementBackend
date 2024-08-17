@@ -9,6 +9,7 @@ const {
   energyCost,
   calculateEnergyCost,
 } = require("./usage/usage");
+const { convertMockToReadings } = require("./utils/convertMockToReadings");
 const { meterReadingsMock } = require("./mocks/meter-readings");
 
 const app = express();
@@ -32,23 +33,14 @@ app.get("/price-plans/compare-all/:smartMeterId", (req, res) => {
   res.send(compare(getReadings, req));
 });
 
-const convertMockToReadings = (mock) => {
-  const newReadingsArray = mock.map((item) => {
-    const date = new Date(item.iso8601Timestamp);
-    const time = date.getTime(); // Convert to seconds since epoch
-    return {
-      time,
-      reading: item.powerReadingInKW,
-    };
-  });
-  return newReadingsArray;
-};
-
 // app.get('/usage/:smartMeterId&:pricePlan', async (req, res) => {
 app.get("/usage/:smartMeterId", async (req, res) => {
   const smartMeterId = req.params.smartMeterId;
-  // const readings = getReadings(smartMeterId);
-  const readings = convertMockToReadings(meterReadingsMock);
+  let readings = getReadings(smartMeterId);
+  const shouldUseMock = false;
+  if (shouldUseMock) {
+    readings = convertMockToReadings(meterReadingsMock);
+  }
   const data = {
     smartMeterId,
     electricityReadings: readings,
@@ -62,7 +54,7 @@ app.get("/usage/:smartMeterId", async (req, res) => {
   })
     .then((result) => {
       console.log("Readings stored successfuly");
-      console.log("Data: ", result);
+      // console.log("Data: ", result);
     })
     .catch((error) => {
       console.log("There was an error when trying to store readings");
