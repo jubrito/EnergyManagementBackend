@@ -1,9 +1,11 @@
-const validatePricePlanForSmartMeterId = (pricePlan) => {
+const { HTTP_STATUS } = require("../constants/http-status");
+
+const validatePricePlanForSmartMeterId = (pricePlan, smartMeterId) => {
   if (pricePlan == null) {
-    res.status(404).send({
-      error: `No price plan found for the smart meter id '${smartMeterId}'`,
-    });
-    return;
+    return {
+      errorMessage: `No price plan found for the smart meter id '${smartMeterId}'`,
+      status: HTTP_STATUS.NOT_FOUND,
+    };
   }
 };
 

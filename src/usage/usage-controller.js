@@ -1,7 +1,7 @@
 const { calculateEnergyCost } = require("./usage");
 const { convertMockToReadings } = require("../utils/convertMockToReadings");
 const { meterReadingsMock } = require("../mocks/meter-readings");
-const { meterPricePlanMap } = require("../meters/meters");
+const { meterPricePlanMap, meters } = require("../meters/meters");
 const { storeReadings } = require("../readings/readings.data");
 const {
   validatePricePlanForSmartMeterId,
@@ -11,10 +11,19 @@ const calculateEnergyCostBySmartMeterId = (getReadings, req) => {
   const readingsStoreURL = "http://localhost:8080/readings/store";
   const smartMeterId = req.params.smartMeterId;
   const pricePlan = meterPricePlanMap[smartMeterId];
-  validatePricePlanForSmartMeterId(pricePlan);
+  const pricePlanValidation = validatePricePlanForSmartMeterId(
+    pricePlan,
+    smartMeterId
+  );
+  if (pricePlanValidation?.errorMessage != null) {
+    return {
+      errorMessage: pricePlanValidation.errorMessage,
+      statusCode: pricePlanValidation.statusCode,
+    };
+  }
   const pricePerKWHInPounds = pricePlan.rate;
   let readings;
-  if (smartMeterId === "smart-meter-example") {
+  if (smartMeterId === meters.METER_WITH_PRICE_PLAN) {
     readings = convertMockToReadings(meterReadingsMock);
   } else {
     readings = getReadings(smartMeterId);
