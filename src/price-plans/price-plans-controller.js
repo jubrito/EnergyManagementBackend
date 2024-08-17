@@ -30,8 +30,4 @@ const compare = (getData, req) => {
   };
 };
 
-const getPricePlanRate = (pricePlan) => {
-  return pricePlans[pricePlan].rate;
-};
-
-module.exports = { recommend, compare, getPricePlanRate };
+module.exports = { recommend, compare };

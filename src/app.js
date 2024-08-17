@@ -10,6 +10,7 @@ const {
 const { calculateEnergyCost } = require("./usage/usage");
 const { convertMockToReadings } = require("./utils/convertMockToReadings");
 const { meterReadingsMock } = require("./mocks/meter-readings");
+const { meterPricePlanMap } = require("./meters/meters");
 
 const app = express();
 app.use(express.json());
@@ -32,29 +33,26 @@ app.get("/price-plans/compare-all/:smartMeterId", (req, res) => {
   res.send(compare(getReadings, req));
 });
 
-// app.get('/usage/:smartMeterId&:pricePlan', async (req, res) => {
-app.get("/usage/:smartMeterId&:pricePlan", async (req, res) => {
+app.get("/usage/:smartMeterId", async (req, res) => {
   const smartMeterId = req.params.smartMeterId;
-  const pricePlan = req.params.pricePlan;
-  const pricePerKWHInPounds = getPricePlanRate(pricePlan);
-  // const pricePerKWHInPounds = extractCost(pricePlan);
-  console.log("pricePerKWHInPounds", pricePerKWHInPounds);
+  const pricePerKWHInPounds = meterPricePlanMap[smartMeterId].rate;
+  const readingsStoreURL = "http://localhost:8080/readings/store";
   let readings;
+  console.log("pricePerKWHInPounds", pricePerKWHInPounds);
   if (smartMeterId === "smart-meter-example") {
     readings = convertMockToReadings(meterReadingsMock);
   } else {
     readings = getReadings(smartMeterId);
   }
-  const data = {
-    smartMeterId,
-    electricityReadings: readings,
-  };
-  fetch("http://localhost:8080/readings/store", {
+  fetch(readingsStoreURL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({
+      smartMeterId,
+      electricityReadings: readings,
+    }),
   })
     .then((result) => {
       console.log("Readings stored successfuly");
@@ -65,7 +63,7 @@ app.get("/usage/:smartMeterId&:pricePlan", async (req, res) => {
       console.log("Error: ", error);
     });
   const energyCost = calculateEnergyCost(readings, pricePerKWHInPounds);
-  res.send({ energyCost: energyCost });
+  res.send({ energyCost });
 });
 
 const port = process.env.PORT || 8080;
