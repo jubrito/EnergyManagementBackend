@@ -3,13 +3,15 @@ const pricePlanNames = {
   PRICEPLAN1: "price-plan-1",
   PRICEPLAN2: "price-plan-2",
   PRICEPLAN_EXERCISE: "price-plan-exercise",
+  PRICEPLAN_EXERCISE_NO_PRICE_PLAN: "price-plan-exercise-no-price-plan",
 };
 
 const supplierNames = {
   DR_EVILS_DARK_ENERGY_ENERGY_SUPPLIER: "Dr Evil's Dark Energy",
   THE_GREEN_ECO_ENERGY_SUPPLIER: "The Green Eco",
   POWER_FOR_EVERYONE_ENERGY_SUPPLIER: "Power for Everyone",
-  EXERCISE_EXAMPLE: "Exercise Example",
+  EXERCISE: "Spreadsheet example",
+  EXERCISE_NO_PRICE_PLAN: "Spreadsheet Example No Price Plan",
 };
 
 const pricePlans = {
@@ -26,8 +28,12 @@ const pricePlans = {
     rate: 1,
   },
   [pricePlanNames.PRICEPLAN_EXERCISE]: {
-    supplier: supplierNames.EXERCISE_EXAMPLE,
+    supplier: supplierNames.EXERCISE,
     rate: 0.29,
+  },
+  [pricePlanNames.PRICEPLAN_EXERCISE_NO_PRICE_PLAN]: {
+    supplier: supplierNames.EXERCISE_NO_PRICE_PLAN,
+    rate: 1.01,
   },
 };
 

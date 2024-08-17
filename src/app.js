@@ -35,7 +35,17 @@ app.get("/price-plans/compare-all/:smartMeterId", (req, res) => {
 
 app.get("/usage/:smartMeterId", async (req, res) => {
   const smartMeterId = req.params.smartMeterId;
-  const pricePerKWHInPounds = meterPricePlanMap[smartMeterId].rate;
+  const pricePlan = meterPricePlanMap[smartMeterId];
+  console.log("pricePlan", pricePlan);
+  if (pricePlan == null) {
+    res
+      .status(404)
+      .send({
+        error: `No price plan found for the smart meter id ${smartMeterId}`,
+      });
+    return;
+  }
+  const pricePerKWHInPounds = pricePlan.rate;
   const readingsStoreURL = "http://localhost:8080/readings/store";
   let readings;
   console.log("pricePerKWHInPounds", pricePerKWHInPounds);
