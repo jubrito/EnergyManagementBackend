@@ -99,6 +99,10 @@ describe("usage", () => {
         [pricePlanNames.PRICEPLAN_NOT_ATTACHED_TO_SMART_METER_ID]:
           (0.26785 / 48) * 1.01,
       },
+      {
+        [pricePlanNames.PRICEPLAN_FOR_METER_WITH_TWO_READINGS_FOR_EACH_WEEK_DAY]:
+          (0.26785 / 48) * 10.1,
+      },
     ];
 
     const usageForAllPricePlansArray = usageForAllPricePlans(
