@@ -53,20 +53,20 @@ const calculateUsageCostBySmartMeterIdForEachWeekDay = (getReadings, req) => {
     readings = getReadings(smartMeterId);
   }
   const readingsByDayOfTheWeek = getReadingsByDayOfTheWeek(readings);
-  const usageCostByWeekDay = {
-    sunday: usageCost(readingsByDayOfTheWeek.sunday, pricePerKWHInPounds) || 0,
-    monday: usageCost(readingsByDayOfTheWeek.monday, pricePerKWHInPounds) || 0,
-    tuesday:
-      usageCost(readingsByDayOfTheWeek.tuesday, pricePerKWHInPounds) || 0,
-    wednesday:
-      usageCost(readingsByDayOfTheWeek.wednesday, pricePerKWHInPounds) || 0,
-    thursday:
-      usageCost(readingsByDayOfTheWeek.thursday, pricePerKWHInPounds) || 0,
-    friday: usageCost(readingsByDayOfTheWeek.friday, pricePerKWHInPounds) || 0,
-    saturday:
-      usageCost(readingsByDayOfTheWeek.saturday, pricePerKWHInPounds) || 0,
-  };
-  return usageCostByWeekDay;
+  const daysOfWeek = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+  ];
+  const usageCostByDayOfTheWeek = daysOfWeek.reduce((acc, day) => {
+    acc[day] = usageCost(readingsByDayOfTheWeek[day], pricePerKWHInPounds) || 0;
+    return acc;
+  }, {});
+  return usageCostByDayOfTheWeek;
 };
 
 module.exports = {

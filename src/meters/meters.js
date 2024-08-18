@@ -9,7 +9,7 @@ const meters = {
   METER_WITH_PRICE_PLAN: "smart-meter-with-price-plan",
   METER_WITHOUT_PRICE_PLAN: "smart-meter-without-price-plan",
   METER_WITH_TWO_READINGS_FOR_EACH_WEEK_DAY:
-    "smart-meter-with-two-readings-for-each-day-of-week",
+    "smart-meter-with-two-readings-for-each-day-of-the-week",
 };
 
 const meterPricePlanMap = {
