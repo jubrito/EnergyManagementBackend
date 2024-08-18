@@ -25,7 +25,8 @@ const generateAllMeters = () => {
 
 const readingsData = generateAllMeters();
 
-const storeReadings = (readingsStoreURL, readings, smartMeterId) => {
+const storeReadings = (readings, smartMeterId) => {
+  const readingsStoreURL = "http://localhost:8080/readings/store";
   fetch(readingsStoreURL, {
     method: "POST",
     headers: {

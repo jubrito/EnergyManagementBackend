@@ -13,7 +13,6 @@ const {
 const { HTTP_STATUS_CODES } = require("../constants/http-status");
 
 const calculateEnergyCostBySmartMeterId = (getReadings, req) => {
-  const readingsStoreURL = "http://localhost:8080/readings/store";
   const smartMeterId = req.params.smartMeterId;
   const { statusCode, message, pricePlan } =
     getPricePlanForSmartMeterId(smartMeterId);
@@ -24,13 +23,11 @@ const calculateEnergyCostBySmartMeterId = (getReadings, req) => {
     };
   }
   const pricePerKWHInPounds = pricePlan.rate;
-  let readings;
-  if (smartMeterId === meters.METER_WITH_PRICE_PLAN) {
-    readings = convertMockToReadings(meterReadingsMock);
-  } else {
-    readings = getReadings(smartMeterId);
-  }
-  storeReadings(readingsStoreURL, readings, smartMeterId);
+  const readings =
+    smartMeterId === meters.METER_WITH_PRICE_PLAN
+      ? convertMockToReadings(meterReadingsMock)
+      : getReadings(smartMeterId);
+  storeReadings(readings, smartMeterId);
   return { energyCost: calculateEnergyCost(readings, pricePerKWHInPounds) };
 };
 
@@ -46,12 +43,12 @@ const calculateUsageCostBySmartMeterIdForEachWeekDay = (getReadings, req) => {
   }
   const pricePerKWHInPounds = pricePlan.rate;
 
-  let readings;
-  if (smartMeterId === meters.METER_WITH_TWO_READINGS_FOR_EACH_WEEK_DAY) {
-    readings = generateTwoReadingsForEachWeekDay();
-  } else {
-    readings = getReadings(smartMeterId);
-  }
+  const readings =
+    smartMeterId === meters.METER_WITH_TWO_READINGS_FOR_EACH_WEEK_DAY
+      ? generateTwoReadingsForEachWeekDay()
+      : getReadings(smartMeterId);
+  storeReadings(readings, smartMeterId);
+
   const readingsByDayOfTheWeek = getReadingsByDayOfTheWeek(readings);
   const daysOfWeek = [
     "sunday",
