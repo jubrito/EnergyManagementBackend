@@ -66,7 +66,26 @@ const calculateUsageCostBySmartMeterIdForEachWeekDay = (getReadings, req) => {
     acc[day] = usageCost(readingsByDayOfTheWeek[day], pricePerKWHInPounds) || 0;
     return acc;
   }, {});
-  return { statusCode, usageCostByDayOfTheWeek };
+  console.log("usageCostByDayOfTheWeek", usageCostByDayOfTheWeek);
+  const rankedAndOrderedUsageCosts = {};
+  Object.values(usageCostByDayOfTheWeek)
+    .sort((a, b) => a - b)
+    .map((orderedUsageCost, rank) => {
+      Object.keys(usageCostByDayOfTheWeek).map((key) => {
+        const keyFound = usageCostByDayOfTheWeek[key] === orderedUsageCost;
+        if (keyFound) {
+          console.log("orderedUsageCost", orderedUsageCost);
+          console.log("key", key);
+          console.log("rank", rank);
+          rankedAndOrderedUsageCosts[key] = {
+            usageCost: orderedUsageCost,
+            rank,
+          };
+        }
+        return;
+      });
+    });
+  return { statusCode, rankedAndOrderedUsageCosts };
 };
 
 module.exports = {
