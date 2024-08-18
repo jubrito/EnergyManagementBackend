@@ -38,6 +38,7 @@ const getPricePlanForSmartMeterId = (smartMeterId) => {
     return {
       message: `No price plan found for the smart meter id '${smartMeterId}'`,
       statusCode: HTTP_STATUS_CODES.NOT_FOUND,
+      pricePlan: undefined,
     };
   }
   return {

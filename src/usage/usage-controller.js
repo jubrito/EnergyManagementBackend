@@ -15,20 +15,15 @@ const { HTTP_STATUS_CODES } = require("../constants/http-status");
 const calculateEnergyCostBySmartMeterId = (getReadings, req) => {
   const readingsStoreURL = "http://localhost:8080/readings/store";
   const smartMeterId = req.params.smartMeterId;
-  const attemptToGetPricePlanForSmartMeterId =
+  const { statusCode, message, pricePlan } =
     getPricePlanForSmartMeterId(smartMeterId);
-  if (
-    attemptToGetPricePlanForSmartMeterId?.statusCode ===
-    HTTP_STATUS_CODES.NOT_FOUND
-  ) {
+  if (statusCode === HTTP_STATUS_CODES.NOT_FOUND) {
     return {
-      errorMessage: attemptToGetPricePlanForSmartMeterId.message,
-      statusCode: attemptToGetPricePlanForSmartMeterId.statusCode,
+      errorMessage: message,
+      statusCode,
     };
   }
-  const pricePlanForSmartMeterId =
-    attemptToGetPricePlanForSmartMeterId.pricePlan;
-  const pricePerKWHInPounds = pricePlanForSmartMeterId.rate;
+  const pricePerKWHInPounds = pricePlan.rate;
   let readings;
   if (smartMeterId === meters.METER_WITH_PRICE_PLAN) {
     readings = convertMockToReadings(meterReadingsMock);
@@ -41,20 +36,15 @@ const calculateEnergyCostBySmartMeterId = (getReadings, req) => {
 
 const calculateUsageCostBySmartMeterIdForEachWeekDay = (getReadings, req) => {
   const smartMeterId = req.params.smartMeterId;
-  const attemptToGetPricePlanForSmartMeterId =
+  const { statusCode, message, pricePlan } =
     getPricePlanForSmartMeterId(smartMeterId);
-  if (
-    attemptToGetPricePlanForSmartMeterId?.statusCode ===
-    HTTP_STATUS_CODES.NOT_FOUND
-  ) {
+  if (statusCode === HTTP_STATUS_CODES.NOT_FOUND) {
     return {
-      errorMessage: attemptToGetPricePlanForSmartMeterId.message,
-      statusCode: attemptToGetPricePlanForSmartMeterId.statusCode,
+      errorMessage: message,
+      statusCode,
     };
   }
-  const pricePlanForSmartMeterId =
-    attemptToGetPricePlanForSmartMeterId.pricePlan;
-  const pricePerKWHInPounds = pricePlanForSmartMeterId.rate;
+  const pricePerKWHInPounds = pricePlan.rate;
 
   let readings;
   if (smartMeterId === meters.METER_WITH_TWO_READINGS_FOR_EACH_WEEK_DAY) {
