@@ -20,25 +20,36 @@ describe("price plans", () => {
     const expected = {
       pricePlanComparisons: [
         {
-          [pricePlanNames.PRICEPLAN0]: (0.26785 / 48) * 10,
+          [pricePlanNames.PRICEPLAN0]:
+            (0.26785 / 48) * pricePlans[pricePlanNames.PRICEPLAN0].rate,
         },
         {
-          [pricePlanNames.PRICEPLAN1]: (0.26785 / 48) * 2,
+          [pricePlanNames.PRICEPLAN1]:
+            (0.26785 / 48) * pricePlans[pricePlanNames.PRICEPLAN1].rate,
         },
         {
-          [pricePlanNames.PRICEPLAN2]: (0.26785 / 48) * 1,
+          [pricePlanNames.PRICEPLAN2]:
+            (0.26785 / 48) * pricePlans[pricePlanNames.PRICEPLAN2].rate,
         },
         {
           [pricePlanNames.PRICEPLAN_ATTACHED_TO_SMART_METER_ID]:
-            (0.26785 / 48) * 0.29,
+            (0.26785 / 48) *
+            pricePlans[pricePlanNames.PRICEPLAN_ATTACHED_TO_SMART_METER_ID]
+              .rate,
         },
         {
           [pricePlanNames.PRICEPLAN_NOT_ATTACHED_TO_SMART_METER_ID]:
-            (0.26785 / 48) * 1.01,
+            (0.26785 / 48) *
+            pricePlans[pricePlanNames.PRICEPLAN_NOT_ATTACHED_TO_SMART_METER_ID]
+              .rate,
         },
         {
           [pricePlanNames.PRICEPLAN_FOR_METER_WITH_TWO_READINGS_FOR_EACH_WEEK_DAY]:
-            (0.26785 / 48) * 10.1,
+            (0.26785 / 48) *
+            pricePlans[
+              pricePlanNames
+                .PRICEPLAN_FOR_METER_WITH_TWO_READINGS_FOR_EACH_WEEK_DAY
+            ].rate,
         },
       ],
       smartMeterId: meters.METER0,
@@ -66,24 +77,34 @@ describe("price plans", () => {
     const expected = [
       {
         [pricePlanNames.PRICEPLAN_ATTACHED_TO_SMART_METER_ID]:
-          (0.26785 / 48) * 0.29,
+          (0.26785 / 48) *
+          pricePlans[pricePlanNames.PRICEPLAN_ATTACHED_TO_SMART_METER_ID].rate,
       },
       {
-        [pricePlanNames.PRICEPLAN2]: (0.26785 / 48) * 1,
+        [pricePlanNames.PRICEPLAN2]:
+          (0.26785 / 48) * pricePlans[pricePlanNames.PRICEPLAN2].rate,
       },
       {
         [pricePlanNames.PRICEPLAN_NOT_ATTACHED_TO_SMART_METER_ID]:
-          (0.26785 / 48) * 1.01,
+          (0.26785 / 48) *
+          pricePlans[pricePlanNames.PRICEPLAN_NOT_ATTACHED_TO_SMART_METER_ID]
+            .rate,
       },
       {
-        [pricePlanNames.PRICEPLAN1]: (0.26785 / 48) * 2,
+        [pricePlanNames.PRICEPLAN1]:
+          (0.26785 / 48) * pricePlans[pricePlanNames.PRICEPLAN1].rate,
       },
       {
-        [pricePlanNames.PRICEPLAN0]: (0.26785 / 48) * 10,
+        [pricePlanNames.PRICEPLAN0]:
+          (0.26785 / 48) * pricePlans[pricePlanNames.PRICEPLAN0].rate,
       },
       {
         [pricePlanNames.PRICEPLAN_FOR_METER_WITH_TWO_READINGS_FOR_EACH_WEEK_DAY]:
-          (0.26785 / 48) * 10.1,
+          (0.26785 / 48) *
+          pricePlans[
+            pricePlanNames
+              .PRICEPLAN_FOR_METER_WITH_TWO_READINGS_FOR_EACH_WEEK_DAY
+          ].rate,
       },
     ];
 
@@ -109,10 +130,12 @@ describe("price plans", () => {
     const expected = [
       {
         [pricePlanNames.PRICEPLAN_ATTACHED_TO_SMART_METER_ID]:
-          (0.26785 / 48) * 0.29,
+          (0.26785 / 48) *
+          pricePlans[pricePlanNames.PRICEPLAN_ATTACHED_TO_SMART_METER_ID].rate,
       },
       {
-        [pricePlanNames.PRICEPLAN2]: (0.26785 / 48) * 1,
+        [pricePlanNames.PRICEPLAN2]:
+          (0.26785 / 48) * pricePlans[pricePlanNames.PRICEPLAN2].rate,
       },
     ];
 
