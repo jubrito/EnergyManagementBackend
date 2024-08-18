@@ -1,4 +1,8 @@
-const { calculateEnergyCost, usageCost } = require("./usage");
+const {
+  calculateEnergyCost,
+  usageCost,
+  getRankedAndOrderedUsageCosts,
+} = require("./usage");
 const { convertMockToReadings } = require("../utils/convertMockToReadings");
 const { meterReadingsMock } = require("../mocks/meter-readings");
 const { meters } = require("../meters/meters");
@@ -27,7 +31,11 @@ const calculateEnergyCostBySmartMeterId = (getReadings, req) => {
     smartMeterId === meters.METER_WITH_PRICE_PLAN
       ? convertMockToReadings(meterReadingsMock)
       : getReadings(smartMeterId);
-  storeReadings(readings, smartMeterId);
+
+  if (readings?.lenght > 0) {
+    storeReadings(readings, smartMeterId);
+  }
+
   return {
     statusCode,
     energyCost: calculateEnergyCost(readings, pricePerKWHInPounds),
@@ -38,6 +46,7 @@ const calculateUsageCostBySmartMeterIdForEachWeekDay = (getReadings, req) => {
   const smartMeterId = req.params.smartMeterId;
   const { statusCode, message, pricePlan } =
     getPricePlanForSmartMeterId(smartMeterId);
+
   if (statusCode === HTTP_STATUS_CODES.NOT_FOUND) {
     return {
       errorMessage: message,
@@ -50,41 +59,17 @@ const calculateUsageCostBySmartMeterIdForEachWeekDay = (getReadings, req) => {
     smartMeterId === meters.METER_WITH_TWO_READINGS_FOR_EACH_WEEK_DAY
       ? generateTwoReadingsForEachWeekDay()
       : getReadings(smartMeterId);
-  storeReadings(readings, smartMeterId);
+
+  if (readings?.lenght > 0) {
+    storeReadings(readings, smartMeterId);
+  }
 
   const readingsByDayOfTheWeek = getReadingsByDayOfTheWeek(readings);
-  const daysOfWeek = [
-    "sunday",
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-  ];
-  const usageCostByDayOfTheWeek = daysOfWeek.reduce((acc, day) => {
-    acc[day] = usageCost(readingsByDayOfTheWeek[day], pricePerKWHInPounds) || 0;
-    return acc;
-  }, {});
-  console.log("usageCostByDayOfTheWeek", usageCostByDayOfTheWeek);
-  const rankedAndOrderedUsageCosts = {};
-  Object.values(usageCostByDayOfTheWeek)
-    .sort((a, b) => a - b)
-    .map((orderedUsageCost, rank) => {
-      Object.keys(usageCostByDayOfTheWeek).map((key) => {
-        const keyFound = usageCostByDayOfTheWeek[key] === orderedUsageCost;
-        if (keyFound) {
-          console.log("orderedUsageCost", orderedUsageCost);
-          console.log("key", key);
-          console.log("rank", rank);
-          rankedAndOrderedUsageCosts[key] = {
-            usageCost: orderedUsageCost,
-            rank,
-          };
-        }
-        return;
-      });
-    });
+
+  const rankedAndOrderedUsageCosts = getRankedAndOrderedUsageCosts(
+    readingsByDayOfTheWeek,
+    pricePerKWHInPounds
+  );
   return { statusCode, rankedAndOrderedUsageCosts };
 };
 

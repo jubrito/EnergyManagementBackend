@@ -49,6 +49,41 @@ const calculateEnergyCost = (readings, pricePerKWHInPounds) => {
   return cost;
 };
 
+const getRankedAndOrderedUsageCosts = (
+  readingsByDayOfTheWeek,
+  pricePerKWHInPounds
+) => {
+  const daysOfWeek = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+  ];
+  const usageCostByDayOfTheWeek = daysOfWeek.reduce((acc, day) => {
+    acc[day] = usageCost(readingsByDayOfTheWeek[day], pricePerKWHInPounds) || 0;
+    return acc;
+  }, {});
+  const rankedAndOrderedUsageCosts = {};
+  Object.values(usageCostByDayOfTheWeek)
+    .sort((a, b) => a - b)
+    .map((orderedUsageCost, rank) => {
+      Object.keys(usageCostByDayOfTheWeek).map((key) => {
+        const keyFound = usageCostByDayOfTheWeek[key] === orderedUsageCost;
+        if (keyFound) {
+          rankedAndOrderedUsageCosts[key] = {
+            usageCost: orderedUsageCost,
+            rank,
+          };
+        }
+        return;
+      });
+    });
+  return rankedAndOrderedUsageCosts;
+};
+
 module.exports = {
   average,
   timeElapsedInWholeHours,
@@ -59,4 +94,5 @@ module.exports = {
   energyConsumedInKWPerHour,
   energyCost,
   calculateEnergyCost,
+  getRankedAndOrderedUsageCosts,
 };
