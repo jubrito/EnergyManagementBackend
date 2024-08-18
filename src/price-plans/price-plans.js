@@ -5,6 +5,8 @@ const pricePlanNames = {
   PRICEPLAN_ATTACHED_TO_SMART_METER_ID: "price-plan-attached-to-smart-meter-id",
   PRICEPLAN_NOT_ATTACHED_TO_SMART_METER_ID:
     "price-plan-not-attached-to-smart-meter-id",
+  PRICEPLAN_FOR_METER_WITH_TWO_READINGS_FOR_EACH_WEEK_DAY:
+    "price-plan-for-meter-with-two-readings-for-each-week-day",
 };
 
 const supplierNames = {
@@ -15,6 +17,8 @@ const supplierNames = {
     "Supplier connected to spreadsheet example where price plan is attached to smart meter id",
   SUPLIER_PRICE_PLAN_NOT_ATTACHED_TO_SMART_METER_ID:
     "Supplier connected to spreadsheet example where price plan is not attached to smart meter id",
+  SUPPLIER_FOR_METER_WITH_TWO_READINGS_FOR_EACH_WEEK_DAY:
+    "Price plan for meter with two readings for each day of the week",
 };
 
 const pricePlans = {
@@ -37,6 +41,11 @@ const pricePlans = {
   [pricePlanNames.PRICEPLAN_NOT_ATTACHED_TO_SMART_METER_ID]: {
     supplier: supplierNames.SUPLIER_PRICE_PLAN_NOT_ATTACHED_TO_SMART_METER_ID,
     rate: 1.01,
+  },
+  [pricePlanNames.PRICEPLAN_FOR_METER_WITH_TWO_READINGS_FOR_EACH_WEEK_DAY]: {
+    supplier:
+      supplierNames.SUPPLIER_FOR_METER_WITH_TWO_READINGS_FOR_EACH_WEEK_DAY,
+    rate: 10.1,
   },
 };
 

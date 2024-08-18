@@ -5,6 +5,7 @@ const { read, store } = require("./readings/readings-controller");
 const { recommend, compare } = require("./price-plans/price-plans-controller");
 const {
   calculateEnergyCostBySmartMeterId,
+  calculateUsageCostBySmartMeterIdForEachWeekDay,
 } = require("./usage/usage-controller");
 
 const app = express();
@@ -28,9 +29,21 @@ app.get("/price-plans/compare-all/:smartMeterId", (req, res) => {
   res.send(compare(getReadings, req));
 });
 
-app.get("/usage/:smartMeterId", async (req, res) => {
+app.get("/usage/energy-cost/:smartMeterId", async (req, res) => {
   res.send(calculateEnergyCostBySmartMeterId(getReadings, req));
 });
+
+app.get(
+  "/usage/energy-cost/compare-days-of-the-week/:smartMeterId",
+  (req, res) => {
+    res.send({
+      usageCostByDayOfTheWeek: calculateUsageCostBySmartMeterIdForEachWeekDay(
+        getReadings,
+        req
+      ),
+    });
+  }
+);
 
 const port = process.env.PORT || 8080;
 app.listen(port);

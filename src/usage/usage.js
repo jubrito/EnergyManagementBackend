@@ -5,8 +5,8 @@ const average = (readings) => {
 };
 
 const timeElapsedInWholeHours = (readings) => {
-  readings.sort((a, b) => a.time - b.time);
-  const seconds = readings[readings.length - 1].time - readings[0].time;
+  readings?.sort((a, b) => a.time - b.time);
+  const seconds = readings[readings.length - 1]?.time - readings[0]?.time;
   const hours = Math.floor(seconds / 3600);
   return hours;
 };

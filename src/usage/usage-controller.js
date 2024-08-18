@@ -1,8 +1,12 @@
-const { calculateEnergyCost } = require("./usage");
+const { calculateEnergyCost, usageCost } = require("./usage");
 const { convertMockToReadings } = require("../utils/convertMockToReadings");
 const { meterReadingsMock } = require("../mocks/meter-readings");
-const { meterPricePlanMap, meters } = require("../meters/meters");
-const { storeReadings } = require("../readings/readings.data");
+const { meters } = require("../meters/meters");
+const {
+  storeReadings,
+  generateTwoReadingsForEachWeekDay,
+  getReadingsByDayOfTheWeek,
+} = require("../readings/readings.data");
 const {
   getPricePlanForSmartMeterId,
 } = require("../price-plans/price-plans-controller");
@@ -35,4 +39,47 @@ const calculateEnergyCostBySmartMeterId = (getReadings, req) => {
   return { energyCost: calculateEnergyCost(readings, pricePerKWHInPounds) };
 };
 
-module.exports = { calculateEnergyCostBySmartMeterId };
+const calculateUsageCostBySmartMeterIdForEachWeekDay = (getReadings, req) => {
+  const smartMeterId = req.params.smartMeterId;
+  const attemptToGetPricePlanForSmartMeterId =
+    getPricePlanForSmartMeterId(smartMeterId);
+  if (
+    attemptToGetPricePlanForSmartMeterId?.statusCode ===
+    HTTP_STATUS_CODES.NOT_FOUND
+  ) {
+    return {
+      errorMessage: attemptToGetPricePlanForSmartMeterId.message,
+      statusCode: attemptToGetPricePlanForSmartMeterId.statusCode,
+    };
+  }
+  const pricePlanForSmartMeterId =
+    attemptToGetPricePlanForSmartMeterId.pricePlan;
+  const pricePerKWHInPounds = pricePlanForSmartMeterId.rate;
+
+  let readings;
+  if (smartMeterId === meters.METER_WITH_TWO_READINGS_FOR_EACH_WEEK_DAY) {
+    readings = generateTwoReadingsForEachWeekDay();
+  } else {
+    readings = getReadings(smartMeterId);
+  }
+  const readingsByDayOfTheWeek = getReadingsByDayOfTheWeek(readings);
+  const usageCostByWeekDay = {
+    sunday: usageCost(readingsByDayOfTheWeek.sunday, pricePerKWHInPounds) || 0,
+    monday: usageCost(readingsByDayOfTheWeek.monday, pricePerKWHInPounds) || 0,
+    tuesday:
+      usageCost(readingsByDayOfTheWeek.tuesday, pricePerKWHInPounds) || 0,
+    wednesday:
+      usageCost(readingsByDayOfTheWeek.wednesday, pricePerKWHInPounds) || 0,
+    thursday:
+      usageCost(readingsByDayOfTheWeek.thursday, pricePerKWHInPounds) || 0,
+    friday: usageCost(readingsByDayOfTheWeek.friday, pricePerKWHInPounds) || 0,
+    saturday:
+      usageCost(readingsByDayOfTheWeek.saturday, pricePerKWHInPounds) || 0,
+  };
+  return usageCostByWeekDay;
+};
+
+module.exports = {
+  calculateEnergyCostBySmartMeterId,
+  calculateUsageCostBySmartMeterIdForEachWeekDay,
+};

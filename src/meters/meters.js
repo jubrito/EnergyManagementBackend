@@ -8,6 +8,8 @@ const meters = {
   METER4: "smart-meter-4",
   METER_WITH_PRICE_PLAN: "smart-meter-with-price-plan",
   METER_WITHOUT_PRICE_PLAN: "smart-meter-without-price-plan",
+  METER_WITH_TWO_READINGS_FOR_EACH_WEEK_DAY:
+    "smart-meter-with-two-readings-for-each-day-of-week",
 };
 
 const meterPricePlanMap = {
@@ -16,6 +18,10 @@ const meterPricePlanMap = {
   [meters.METER2]: pricePlans[pricePlanNames.PRICEPLAN2],
   [meters.METER_WITH_PRICE_PLAN]:
     pricePlans[pricePlanNames.PRICEPLAN_ATTACHED_TO_SMART_METER_ID],
+  [meters.METER_WITH_TWO_READINGS_FOR_EACH_WEEK_DAY]:
+    pricePlans[
+      pricePlanNames.PRICEPLAN_FOR_METER_WITH_TWO_READINGS_FOR_EACH_WEEK_DAY
+    ],
 };
 
 module.exports = { meterPricePlanMap, meters };

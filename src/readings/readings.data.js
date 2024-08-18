@@ -46,4 +46,78 @@ const storeReadings = (readingsStoreURL, readings, smartMeterId) => {
     });
 };
 
-module.exports = { readingsData, storeReadings };
+const generateTimestampForDay = (dayOfWeek, hour = 12) => {
+  const now = new Date();
+  const currentDay = now.getDay();
+  const diff = dayOfWeek - currentDay;
+  const targetDate = new Date(now);
+  targetDate.setDate(now.getDate() + diff);
+  targetDate.setHours(hour, 0, 0, 0);
+  return targetDate.getTime();
+};
+
+const generateTwoReadingsForEachWeekDay = () => {
+  const daysOfWeek = [0, 1, 2, 3, 4, 5, 6]; // Sunday to Saturday
+  const readings = [];
+
+  daysOfWeek.forEach((day) => {
+    for (let i = 0; i < 2; i++) {
+      // 2 readings per day
+      readings.push({
+        time: generateTimestampForDay(day, 12 + i), // Different hour for each reading
+        reading: Math.random() * 2,
+      });
+    }
+  });
+
+  return readings;
+};
+
+const getReadingsByDayOfTheWeek = (readings) => {
+  const readingsByDayOfTheWeek = {
+    monday: [],
+    tuesday: [],
+    wednesday: [],
+    thursday: [],
+    friday: [],
+    saturday: [],
+    sunday: [],
+  };
+  readings.map((reading) => {
+    const timestamp = reading.time;
+    const day = new Date(timestamp).getDay();
+    switch (day) {
+      case 0:
+        readingsByDayOfTheWeek.sunday.push(reading);
+        break;
+      case 1:
+        readingsByDayOfTheWeek.monday.push(reading);
+        break;
+      case 2:
+        readingsByDayOfTheWeek.tuesday.push(reading);
+        break;
+      case 3:
+        readingsByDayOfTheWeek.wednesday.push(reading);
+        break;
+      case 4:
+        readingsByDayOfTheWeek.thursday.push(reading);
+        break;
+      case 5:
+        readingsByDayOfTheWeek.friday.push(reading);
+        break;
+      case 6:
+        readingsByDayOfTheWeek.saturday.push(reading);
+        break;
+      default:
+        break;
+    }
+  });
+  return readingsByDayOfTheWeek;
+};
+
+module.exports = {
+  readingsData,
+  storeReadings,
+  generateTwoReadingsForEachWeekDay,
+  getReadingsByDayOfTheWeek,
+};
