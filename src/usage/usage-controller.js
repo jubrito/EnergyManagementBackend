@@ -6,6 +6,7 @@ const { storeReadings } = require("../readings/readings.data");
 const {
   validatePricePlanForSmartMeterId,
 } = require("../validations/price-plan-validations");
+const { HTTP_STATUS_CODES } = require("../constants/http-status");
 
 const calculateEnergyCostBySmartMeterId = (getReadings, req) => {
   const readingsStoreURL = "http://localhost:8080/readings/store";
@@ -15,9 +16,9 @@ const calculateEnergyCostBySmartMeterId = (getReadings, req) => {
     pricePlan,
     smartMeterId
   );
-  if (pricePlanValidation?.errorMessage != null) {
+  if (pricePlanValidation?.statusCode === HTTP_STATUS_CODES.NOT_FOUND) {
     return {
-      errorMessage: pricePlanValidation.errorMessage,
+      errorMessage: pricePlanValidation.message,
       statusCode: pricePlanValidation.statusCode,
     };
   }
