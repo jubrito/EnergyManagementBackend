@@ -36,12 +36,7 @@ app.get("/usage/energy-cost/:smartMeterId", async (req, res) => {
 app.get(
   "/usage/energy-cost/compare-days-of-the-week/:smartMeterId",
   (req, res) => {
-    res.send({
-      usageCostByDayOfTheWeek: calculateUsageCostBySmartMeterIdForEachWeekDay(
-        getReadings,
-        req
-      ),
-    });
+    res.send(calculateUsageCostBySmartMeterIdForEachWeekDay(getReadings, req));
   }
 );
 

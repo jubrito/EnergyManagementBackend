@@ -28,7 +28,10 @@ const calculateEnergyCostBySmartMeterId = (getReadings, req) => {
       ? convertMockToReadings(meterReadingsMock)
       : getReadings(smartMeterId);
   storeReadings(readings, smartMeterId);
-  return { energyCost: calculateEnergyCost(readings, pricePerKWHInPounds) };
+  return {
+    statusCode,
+    energyCost: calculateEnergyCost(readings, pricePerKWHInPounds),
+  };
 };
 
 const calculateUsageCostBySmartMeterIdForEachWeekDay = (getReadings, req) => {
@@ -63,7 +66,7 @@ const calculateUsageCostBySmartMeterIdForEachWeekDay = (getReadings, req) => {
     acc[day] = usageCost(readingsByDayOfTheWeek[day], pricePerKWHInPounds) || 0;
     return acc;
   }, {});
-  return usageCostByDayOfTheWeek;
+  return { statusCode, usageCostByDayOfTheWeek };
 };
 
 module.exports = {
