@@ -1,7 +1,11 @@
 const { meters } = require("../meters/meters");
-const { pricePlanNames } = require("./price-plans");
+const { pricePlans, pricePlanNames } = require("./price-plans");
 const { readings } = require("../readings/readings");
 const { compare, recommend } = require("./price-plans-controller");
+const {
+  getPricePlanForSmartMeterId,
+} = require("../price-plans/price-plans-controller");
+const { HTTP_STATUS_CODES } = require("../constants/http-status");
 
 describe("price plans", () => {
   it("should compare usage cost for all price plans", () => {
@@ -114,5 +118,23 @@ describe("price plans", () => {
     });
 
     expect(recommendation).toEqual(expected);
+  });
+  it("should return a 404 status code and an error message if smart meter id does not have a price plan attached to it", () => {
+    const smartMeterId = meters.METER_WITHOUT_PRICE_PLAN;
+    const validationResult = getPricePlanForSmartMeterId(smartMeterId);
+    expect(validationResult).toStrictEqual({
+      statusCode: HTTP_STATUS_CODES.NOT_FOUND,
+      message: `No price plan found for the smart meter id '${smartMeterId}'`,
+    });
+  });
+  it("should return a 200 status code and an success message if smart meter id does not have a price plan attached to it", () => {
+    const smartMeterId = meters.METER_WITH_PRICE_PLAN;
+    const validationResult = getPricePlanForSmartMeterId(smartMeterId);
+    expect(validationResult).toStrictEqual({
+      statusCode: HTTP_STATUS_CODES.OK,
+      message: `A price plan was found for the smart meter id '${smartMeterId}'`,
+      pricePlan:
+        pricePlans[pricePlanNames.PRICEPLAN_ATTACHED_TO_SMART_METER_ID],
+    });
   });
 });

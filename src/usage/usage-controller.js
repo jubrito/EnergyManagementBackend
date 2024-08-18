@@ -4,25 +4,27 @@ const { meterReadingsMock } = require("../mocks/meter-readings");
 const { meterPricePlanMap, meters } = require("../meters/meters");
 const { storeReadings } = require("../readings/readings.data");
 const {
-  validatePricePlanForSmartMeterId,
-} = require("../validations/price-plan-validations");
+  getPricePlanForSmartMeterId,
+} = require("../price-plans/price-plans-controller");
 const { HTTP_STATUS_CODES } = require("../constants/http-status");
 
 const calculateEnergyCostBySmartMeterId = (getReadings, req) => {
   const readingsStoreURL = "http://localhost:8080/readings/store";
   const smartMeterId = req.params.smartMeterId;
-  const pricePlan = meterPricePlanMap[smartMeterId];
-  const pricePlanValidation = validatePricePlanForSmartMeterId(
-    pricePlan,
-    smartMeterId
-  );
-  if (pricePlanValidation?.statusCode === HTTP_STATUS_CODES.NOT_FOUND) {
+  const attemptToGetPricePlanForSmartMeterId =
+    getPricePlanForSmartMeterId(smartMeterId);
+  if (
+    attemptToGetPricePlanForSmartMeterId?.statusCode ===
+    HTTP_STATUS_CODES.NOT_FOUND
+  ) {
     return {
-      errorMessage: pricePlanValidation.message,
-      statusCode: pricePlanValidation.statusCode,
+      errorMessage: attemptToGetPricePlanForSmartMeterId.message,
+      statusCode: attemptToGetPricePlanForSmartMeterId.statusCode,
     };
   }
-  const pricePerKWHInPounds = pricePlan.rate;
+  const pricePlanForSmartMeterId =
+    attemptToGetPricePlanForSmartMeterId.pricePlan;
+  const pricePerKWHInPounds = pricePlanForSmartMeterId.rate;
   let readings;
   if (smartMeterId === meters.METER_WITH_PRICE_PLAN) {
     readings = convertMockToReadings(meterReadingsMock);

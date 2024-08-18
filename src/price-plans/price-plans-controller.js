@@ -1,5 +1,7 @@
 const { pricePlans } = require("./price-plans");
 const { usageForAllPricePlans } = require("../usage/usage");
+const { meterPricePlanMap } = require("../meters/meters");
+const { HTTP_STATUS_CODES } = require("../constants/http-status");
 
 const recommend = (getReadings, req) => {
   const meter = req.params.smartMeterId;
@@ -30,4 +32,19 @@ const compare = (getData, req) => {
   };
 };
 
-module.exports = { recommend, compare };
+const getPricePlanForSmartMeterId = (smartMeterId) => {
+  const pricePlan = meterPricePlanMap[smartMeterId];
+  if (pricePlan == null) {
+    return {
+      message: `No price plan found for the smart meter id '${smartMeterId}'`,
+      statusCode: HTTP_STATUS_CODES.NOT_FOUND,
+    };
+  }
+  return {
+    message: `A price plan was found for the smart meter id '${smartMeterId}'`,
+    statusCode: 200,
+    pricePlan,
+  };
+};
+
+module.exports = { recommend, compare, getPricePlanForSmartMeterId };
