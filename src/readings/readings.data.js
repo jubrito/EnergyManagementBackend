@@ -75,44 +75,87 @@ const generateTwoReadingsForEachWeekDay = () => {
 };
 
 const getReadingsByDayOfTheWeek = (readings) => {
-  const readingsByDayOfTheWeek = {
-    monday: [],
-    tuesday: [],
-    wednesday: [],
-    thursday: [],
-    friday: [],
-    saturday: [],
-    sunday: [],
-  };
+  const readingsByDayOfTheWeek = {};
+  console.log("readings", readings);
   readings.map((reading) => {
     const timestamp = reading.time;
     const day = new Date(timestamp).getDay();
     switch (day) {
       case 0:
-        readingsByDayOfTheWeek.sunday.push(reading);
+        if (!readingsByDayOfTheWeek["sunday"]) {
+          readingsByDayOfTheWeek["sunday"] = [reading];
+          break;
+        }
+        readingsByDayOfTheWeek["sunday"] = [
+          ...readingsByDayOfTheWeek["sunday"],
+          reading,
+        ];
         break;
       case 1:
-        readingsByDayOfTheWeek.monday.push(reading);
+        if (!readingsByDayOfTheWeek["monday"]) {
+          readingsByDayOfTheWeek["monday"] = [reading];
+          break;
+        }
+        readingsByDayOfTheWeek["monday"] = [
+          ...readingsByDayOfTheWeek["monday"],
+          reading,
+        ];
         break;
       case 2:
-        readingsByDayOfTheWeek.tuesday.push(reading);
+        if (!readingsByDayOfTheWeek["tuesday"]) {
+          readingsByDayOfTheWeek["tuesday"] = [reading];
+          break;
+        }
+        readingsByDayOfTheWeek["tuesday"] = [
+          ...readingsByDayOfTheWeek["tuesday"],
+          reading,
+        ];
         break;
       case 3:
-        readingsByDayOfTheWeek.wednesday.push(reading);
+        if (!readingsByDayOfTheWeek["wednesday"]) {
+          readingsByDayOfTheWeek["wednesday"] = [reading];
+          break;
+        }
+        readingsByDayOfTheWeek["wednesday"] = [
+          ...readingsByDayOfTheWeek["wednesday"],
+          reading,
+        ];
         break;
       case 4:
-        readingsByDayOfTheWeek.thursday.push(reading);
+        if (!readingsByDayOfTheWeek["thursday"]) {
+          readingsByDayOfTheWeek["thursday"] = [reading];
+          break;
+        }
+        readingsByDayOfTheWeek["thursday"] = [
+          ...readingsByDayOfTheWeek["thursday"],
+          reading,
+        ];
         break;
       case 5:
-        readingsByDayOfTheWeek.friday.push(reading);
+        if (!readingsByDayOfTheWeek["friday"]) {
+          readingsByDayOfTheWeek["friday"] = [reading];
+          break;
+        }
+        readingsByDayOfTheWeek["friday"] = [
+          ...readingsByDayOfTheWeek["friday"],
+          reading,
+        ];
         break;
       case 6:
-        readingsByDayOfTheWeek.saturday.push(reading);
+        if (!readingsByDayOfTheWeek["saturday"]) {
+          readingsByDayOfTheWeek["saturday"] = [reading];
+          break;
+        }
+        readingsByDayOfTheWeek["saturday"] = [
+          ...readingsByDayOfTheWeek["saturday"],
+          reading,
+        ];
         break;
       default:
         break;
     }
   });
+  console.log("readingsByDayOfTheWeek", readingsByDayOfTheWeek);
   return readingsByDayOfTheWeek;
 };
 

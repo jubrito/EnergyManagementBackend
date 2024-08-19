@@ -20,6 +20,13 @@ const timeElapsedInDecimalHours = (readings) => {
 };
 
 const usage = (readings) => {
+  console.log("USAGE -------");
+  console.log("readings", readings);
+  console.log("average(readings)", average(readings));
+  console.log(
+    "timeElapsedInWholeHours(readings)",
+    timeElapsedInWholeHours(readings)
+  );
   return average(readings) / timeElapsedInWholeHours(readings);
 };
 
@@ -28,6 +35,9 @@ const energyConsumedInKWPerHour = (readings) => {
 };
 
 const usageCost = (readings, rate) => {
+  if (readings?.length === 0) {
+    return 0;
+  }
   return usage(readings) * rate;
 };
 
@@ -53,6 +63,9 @@ const getRankedAndOrderedUsageCosts = (
   readingsByDayOfTheWeek,
   pricePerKWHInPounds
 ) => {
+  // console.log("readingsByDayOfTheWeek", readingsByDayOfTheWeek);
+  // console.log("pricePerKMInPounds", pricePerKWHInPounds);
+
   const daysOfWeek = [
     "sunday",
     "monday",
@@ -63,24 +76,59 @@ const getRankedAndOrderedUsageCosts = (
     "saturday",
   ];
   const usageCostByDayOfTheWeek = daysOfWeek.reduce((acc, day) => {
-    acc[day] = usageCost(readingsByDayOfTheWeek[day], pricePerKWHInPounds) || 0;
+    console.log("day", day);
+    // console.log("readingsByDayOfTheWeek[day]", readingsByDayOfTheWeek[day]);
+    // console.log(
+    //   "usageCost(readingsByDayOfTheWeek[day], pricePerKWHInPounds)",
+    //   usageCost(readingsByDayOfTheWeek[day], pricePerKWHInPounds)
+    // );
+    if (readingsByDayOfTheWeek[day] != null) {
+      acc[day] = usageCost(readingsByDayOfTheWeek[day], pricePerKWHInPounds);
+    }
     return acc;
   }, {});
   const rankedAndOrderedUsageCosts = {};
+  // Object.values(usageCostByDayOfTheWeek)
+  //   .sort((a, b) => a - b)
+  //   .map((orderedUsageCost, rank) => {
+  //     Object.keys(usageCostByDayOfTheWeek).map((key) => {
+  //       const keyFound = usageCostByDayOfTheWeek[key] === orderedUsageCost;
+  //       if (keyFound) {
+  //         rankedAndOrderedUsageCosts[key] = {
+  //           usageCost: orderedUsageCost,
+  //           rank,
+  //         };
+  //       }
+  //       return;
+  //     });
+  //   });
   Object.values(usageCostByDayOfTheWeek)
     .sort((a, b) => a - b)
-    .map((orderedUsageCost, rank) => {
-      Object.keys(usageCostByDayOfTheWeek).map((key) => {
-        const keyFound = usageCostByDayOfTheWeek[key] === orderedUsageCost;
-        if (keyFound) {
-          rankedAndOrderedUsageCosts[key] = {
-            usageCost: orderedUsageCost,
-            rank,
-          };
-        }
-        return;
-      });
+    .map((sortedUsageCost, rank) => {
+      const sortedUsageCostKey = Object.keys(usageCostByDayOfTheWeek).find(
+        (key) => usageCostByDayOfTheWeek[key] === sortedUsageCost
+      );
+      console.log("sortedUsageCostKey", sortedUsageCostKey);
+      rankedAndOrderedUsageCosts[sortedUsageCostKey] = {
+        usageCost: sortedUsageCost,
+        rank,
+      };
     });
+  console.log("rankedAndOrderedUsageCosts", rankedAndOrderedUsageCosts);
+
+  // Object.keys(usageCostByDayOfTheWeek).map((key) => {
+  //   const keyFound = usageCostByDayOfTheWeek[key] === orderedUsageCost;
+  //   if (keyFound) {
+  //     rankedAndOrderedUsageCosts[key] = {
+  //       usageCost: orderedUsageCost,
+  //       rank,
+  //     };
+  //   }
+  //   return;
+  // });
+  // .map((orderedUsageCost, rank) => {
+
+  // });
   return rankedAndOrderedUsageCosts;
 };
 
