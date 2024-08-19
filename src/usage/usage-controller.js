@@ -27,10 +27,7 @@ const calculateEnergyCostBySmartMeterId = (getReadings, req) => {
     };
   }
   const pricePerKWHInPounds = pricePlan.rate;
-  const readings =
-    smartMeterId === meters.METER_WITH_PRICE_PLAN
-      ? convertMockToReadings(meterReadingsMock)
-      : getReadings(smartMeterId);
+  const readings = getReadings(smartMeterId);
 
   if (readings?.lenght > 0) {
     storeReadings(readings, smartMeterId);

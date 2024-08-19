@@ -1,10 +1,9 @@
 const { meters } = require("../meters/meters");
 const { pricePlans, pricePlanNames } = require("../price-plans/price-plans");
 const { getReadings, readings } = require("../readings/readings");
-const {
-  getReadingsByDayOfTheWeek,
-  generateTwoReadingsForEachWeekDay,
-} = require("../readings/readings.data");
+const { convertMockToReadings } = require("../utils/convertMockToReadings");
+const { meterReadingsMock } = require("../mocks/meter-readings");
+const { getReadingsByDayOfTheWeek } = require("../readings/readings.data");
 const {
   calculateEnergyCostBySmartMeterId,
   calculateUsageCostBySmartMeterIdForEachWeekDay,
@@ -24,6 +23,13 @@ describe("usage-controller", () => {
         smartMeterId: meters.METER_WITH_PRICE_PLAN,
       },
     };
+    console.log(
+      "convertMockToReadings(meterReadingsMock)",
+      convertMockToReadings(meterReadingsMock)
+    );
+    const { getReadings } = readings({
+      [meters.METER_WITH_PRICE_PLAN]: convertMockToReadings(meterReadingsMock),
+    });
     const { energyCost } = calculateEnergyCostBySmartMeterId(getReadings, req);
     expect(energyCost).toBe("45.10");
   });
