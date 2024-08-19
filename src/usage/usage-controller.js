@@ -63,14 +63,11 @@ const calculateUsageCostBySmartMeterIdForEachWeekDay = (getReadings, req) => {
     storeReadings(readings, smartMeterId);
   }
 
-  console.log("calculateUsageCostBySmartMeterIdForEachWeekDay");
   const readingsByDayOfTheWeek = getReadingsByDayOfTheWeek(readings);
   const rankedAndOrderedUsageCosts = getRankedAndOrderedUsageCosts(
     readingsByDayOfTheWeek,
     pricePerKWHInPounds
   );
-  console.log("readingsByDayOfTheWeek", readingsByDayOfTheWeek);
-  console.log("rankedAndOrderedUsageCosts", rankedAndOrderedUsageCosts);
   return { statusCode, rankedAndOrderedUsageCosts };
 };
 

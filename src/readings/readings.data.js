@@ -76,7 +76,6 @@ const generateTwoReadingsForEachWeekDay = () => {
 
 const getReadingsByDayOfTheWeek = (readings) => {
   const readingsByDayOfTheWeek = {};
-  console.log("readings", readings);
   readings.map((reading) => {
     const timestamp = reading.time;
     const day = new Date(timestamp).getDay();
@@ -155,7 +154,6 @@ const getReadingsByDayOfTheWeek = (readings) => {
         break;
     }
   });
-  console.log("readingsByDayOfTheWeek", readingsByDayOfTheWeek);
   return readingsByDayOfTheWeek;
 };
 
